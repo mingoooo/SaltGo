@@ -1,0 +1,83 @@
+{% include "base.html" %}
+
+
+{% block content %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="panel-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">state任务</h1>
+                    </div>
+            <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+                <form method="post" action="{% url 'exec_cmd' %}" >
+                    {% csrf_token %}
+                    <div class="col-md-5">
+                        <label>匹配方式</label>
+                        <select class="form-control" name="expr_form">
+                            <option value="glob" selected="selected">Glob</option>
+                            <option value="list">List</option>
+                            <option value="grains">Grains</option>
+                            <option value="pillar">Pillar</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label>目标</label>
+                        <input class="form-control" name="minion_id" type="text" placeholder="target" />
+                    </div>
+                    <div class="col-md-5" style="padding-top:25px; padding-bottom:25px;">
+                        <label>操作</label>
+                        <select multiple class="form-control">
+                            <option>初始化设置</option>
+                            <option>添加TOMCAT</option>
+                            <option>添加MySQL实例</option>
+                        </select>
+                    </div>
+                </form>
+                    <div class="col-md-5" style="padding-top:25px;">
+                        <label>描述</label>
+                        <textarea class="form-control" disabled=disabled rows="4"></textarea>
+                    </div>
+                    <div class="col-md-12" style="padding-bottom:25px;">
+                        <button type="submit" class="btn btn-success">执行</button>
+                        <input type="reset" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <b>最近10次记录</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>执行时间</th>
+                                        <th>目标</th>
+                                        <th>执行命令</th>
+                                    </tr>
+                                </thead>
+                                {% for j in jobs %}
+                                <thead>
+                                <tr>
+                                    <td width="180" style="word-wrap:break-word;"><a href="{% url 'get_result' j.jid %}">{{ j.start_time|date:"Y-m-d H:i:s" }}</a></td>
+                                    <td width="200" style="word-wrap:break-word;">{{ j.target }}</td>
+                                    <td width="450" style="word-break:break-all;">{{ j.command }}</td>
+                                </tr>
+                                </thead>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    <!-- /.container-fluid -->
+</div>
+{% endblock %}

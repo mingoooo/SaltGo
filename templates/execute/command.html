@@ -1,0 +1,85 @@
+{% include "base.html" %}
+
+
+{% block content %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="panel-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">执行命令</h1>
+                    </div>
+            <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+                <form method="post" action="{% url 'exec_cmd' %}" >
+                    {% csrf_token %}
+                    <div class="col-md-5">
+                        <label>匹配方式</label>
+                        <select class="form-control" name="expr_from">
+                            <option value="glob" selected="selected">Glob</option>
+                            <option value="pcre">Regex</option>
+                            <option value="list">List</option>
+                            <option value="grains">Grains</option>
+                            <option value="pillar">Pillar</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label>目标</label>
+                        <input class="form-control" name="target" type="text" placeholder="target" />
+                    </div>
+                    <div class="col-md-12" style="padding-top:25px; padding-bottom:20px;">
+                        <p><b>命令</b></p>
+                        <textarea rows="8" cols="130" name="command"></textarea>
+                    </div>
+                    <div class="col-md-2" style="padding-bottom:30px;">
+                        <button type="submit" id="runcmd" class="btn btn-success">执行</button>
+                        <input type="reset" class="btn btn-danger" />
+                    </div>
+                    {% if error_msg %}
+                    <div class="col-md-4" style="padding-bottom:10px;">
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            {{ error_msg }}
+                        </div>
+                    </div>
+                    {% endif %}
+                 </form>
+                </div>
+            </div>
+            <div class="col-lg-12"></div>
+            <div class="panel panel-success">
+                <div class="panel-heading" id="cmd_history">
+                    <b>最近10次记录</b>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>执行时间</th>
+                                    <th>执行用户</th>
+                                    <th>目标</th>
+                                    <th>执行命令</th>
+                                </tr>
+                            </thead>
+                            {% for j in jobs %}
+                            <thead>
+                            <tr>
+                                <td width="200" style="word-wrap:break-word;"><a href="{% url 'get_result' j.jid %}">{{ j.start_time|date:"Y-m-d H:i:s" }}</a></td>
+                                <td width="200" style="word-wrap:break-word;">{{ j.user }}</td>
+                                <td width="200" style="word-wrap:break-word;">{{ j.target }}</td>
+                                <td width="400" style="word-break:break-all;">{{ j.command }}</td>
+                            </tr>
+                            </thead>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    <!-- /.container-fluid -->
+</div>
+{% endblock %}
