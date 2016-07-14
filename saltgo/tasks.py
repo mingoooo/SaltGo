@@ -30,3 +30,7 @@ def save_result(jid, total):
         r = models.Jobs_Result(jid_id=jid, succeed=succeed, failed=failed, result=u"获取返回结果失败, jid: %s" % jid)
         r.save()
         logger.error(u"获取返回结果失败, jid: %s" % jid)
+
+
+if __name__ == '__main__':
+    pass

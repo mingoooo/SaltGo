@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'minion',
     'account',
     'djcelery',
+    'django_crontab',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -87,8 +88,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'saltgo',
         'USER': 'root',
-        'PASSWORD': 'sandisandi',
-        'HOST': '172.16.23.154',
+        'PASSWORD': 'passwd',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -159,7 +160,7 @@ LOGGING = {
         'saltgo_default': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/saltgo.log',
+            'filename': '/var/log/saltgo.log',
             'maxBytes': 1024 * 1024 * 5,
             'backupCount': 5,
             'formatter': 'standard',
@@ -174,15 +175,21 @@ LOGGING = {
     }
 }
 # saltstack
-SALT_API_URL = 'http://172.16.23.154:8000'
+SALT_API_URL = 'http://127.0.0.1:8000'
 SALT_API_USER = 'admin'
 SALT_API_PASSWD = 'admin'
 
 # celery + rabbitmq
 platforms.C_FORCE_ROOT = True   # Running a worker with superuser privileges
 djcelery.setup_loader()
-BROKER_HOST = "172.16.23.154"
+BROKER_HOST = "127.0.0.1"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
+
+# django-crontab
+CRONJOBS = [
+    ('*/1 * * * *', 'saltgo.cron.update_minion_status', '>> /tmp/saltgo_cron.log'),
+]
+
