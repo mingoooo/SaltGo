@@ -24,7 +24,7 @@ class Minion_Status(models.Model):
                                   choices=key_c)
 
     def __unicode__(self):
-        return u'%s %s' % (self.minion_id, self.is_online)
+        return u'%s' % self.minion_id
 
 
 class Jobs_History(models.Model):
@@ -38,7 +38,7 @@ class Jobs_History(models.Model):
     user = models.ForeignKey(User)
 
     def __unicode__(self):
-        return u'%s %s %s %s %s' % (self.jid, self.target, self.start_time, self.sls, self.command)
+        return u'%s (%s)' % (self.jid, self.start_time)
 
 
 class Jobs_Result(models.Model):
@@ -49,4 +49,4 @@ class Jobs_Result(models.Model):
     end_time = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return u'%s %s' % (self.jid, self.result)
+        return u'%s (%s)' % (self.jid, self.end_time)

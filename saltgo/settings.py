@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    # 'django.contrib.messages',
+     'django.contrib.messages',
     'django.contrib.staticfiles',
     'saltgo',
     'dashboard',
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'minion',
     'account',
     'djcelery',
-    'django_crontab',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -55,7 +54,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    # 'django.contrib.messages.middleware.MessageMiddleware',
+     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -71,7 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                # 'django.contrib.messages.context_processors.messages',
+                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -89,7 +88,7 @@ DATABASES = {
         'NAME': 'saltgo',
         'USER': 'root',
         'PASSWORD': 'passwd',
-        'HOST': '127.0.0.1',
+        'HOST': '172.16.23.154',
         'PORT': '3306',
     }
 }
@@ -175,21 +174,19 @@ LOGGING = {
     }
 }
 # saltstack
-SALT_API_URL = 'http://127.0.0.1:8000'
+SALT_API_URL = 'http://172.16.23.154:8000'
 SALT_API_USER = 'admin'
 SALT_API_PASSWD = 'admin'
 
 # celery + rabbitmq
 platforms.C_FORCE_ROOT = True   # Running a worker with superuser privileges
 djcelery.setup_loader()
-BROKER_HOST = "127.0.0.1"
+BROKER_HOST = "172.16.23.154"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
-# django-crontab
-CRONJOBS = [
-    ('*/1 * * * *', 'saltgo.cron.update_minion_status', '>> /tmp/saltgo_cron.log'),
-]
 
