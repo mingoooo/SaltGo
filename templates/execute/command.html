@@ -58,8 +58,8 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>详细</th>
                                     <th>执行时间</th>
-                                    <th>执行用户</th>
                                     <th>目标</th>
                                     <th>执行命令</th>
                                 </tr>
@@ -67,9 +67,15 @@
                             {% for j in jobs %}
                             <thead>
                             <tr>
-                                <td width="200" style="word-wrap:break-word;"><a href="{% url 'get_result' j.jid %}">{{ j.start_time|date:"Y-m-d H:i:s" }}</a></td>
-                                <td width="200" style="word-wrap:break-word;">{{ j.user }}</td>
-                                <td width="200" style="word-wrap:break-word;">{{ j.target }}</td>
+                                <td width="100">
+                                    <a href="{% url 'get_result' j.jid %}">
+                                        <button class="btn btn-info btn-circle">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td width="200" style="word-wrap:break-word;">{{ j.start_time|date:"Y-m-d H:i:s" }}</td>
+                                <td width="300" style="word-wrap:break-word;">{{ j.target }}</td>
                                 <td width="400" style="word-break:break-all;">{{ j.command }}</td>
                             </tr>
                             </thead>

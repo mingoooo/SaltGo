@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'saltgo',
         'USER': 'root',
-        'PASSWORD': 'passwd',
+        'PASSWORD': 'sandisandi',
         'HOST': '172.16.23.154',
         'PORT': '3306',
     }
@@ -159,7 +159,7 @@ LOGGING = {
         'saltgo_default': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/saltgo.log',
+            'filename': 'logs/saltgo.log',
             'maxBytes': 1024 * 1024 * 5,
             'backupCount': 5,
             'formatter': 'standard',

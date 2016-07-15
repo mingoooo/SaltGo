@@ -29,7 +29,10 @@ def exec_state(request):
 @login_required(login_url="/login/")
 def command(request):
     """command view"""
-    jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
+    try:
+        jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
+    except Exception as e:
+        logger.error(e)
     return render(request, 'execute/command.html', locals())
 
 
@@ -42,6 +45,7 @@ def exec_cmd(request):
         cmd = request.POST.get('command')
         if expr_from and tgt and cmd:
             try:
+                logger.info(u'执行命令,(expr_from: %s, target: %s, command: %s)' % (expr_from, tgt, cmd))
                 api = SaltAPI.SaltAPI()
                 ret = api.shell_cmd(tgt, cmd, expr_from)
             except Exception as e:
@@ -69,10 +73,12 @@ def exec_cmd(request):
             else:
                 jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
                 error_msg = '没有匹配的主机！'
+                logger.warning(u'没有匹配的主机！')
                 return render(request, 'execute/command.html', locals())
         else:
             jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
             error_msg = '信息不完整！'
+            logger.warning(u'信息不完整！')
             return render(request, 'execute/command.html', locals())
     return redirect('command')
 
@@ -82,8 +88,10 @@ def get_result(request, jid):
     """ result view """
     try:
         ret = models.Jobs_Result.objects.get(jid=jid)
+        u = models.Jobs_History.objects.get(jid=jid).user
         res = json.loads(ret.result)
-    except Exception: pass
+    except Exception as e:
+        logger.error(e)
     return render(request, 'execute/result.html', locals())
 
 
