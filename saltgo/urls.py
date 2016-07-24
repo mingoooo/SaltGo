@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^execute/', include('execute.urls')),
     url(r'^minion/', include('minion.urls')),
     url(r'^account/', include('account.urls')),
-    url(r'^login/', account_views.login, name='login'),
+    url(r'^login', account_views.login, name='login'),
 ]

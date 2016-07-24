@@ -87,8 +87,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'saltgo',
         'USER': 'root',
-        'PASSWORD': 'sandisandi',
-        'HOST': '172.16.23.154',
+        'PASSWORD': 'passwd',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -174,14 +174,14 @@ LOGGING = {
     }
 }
 # saltstack
-SALT_API_URL = 'http://172.16.23.154:8000'
+SALT_API_URL = 'http://127.0.0.1:8000'
 SALT_API_USER = 'admin'
 SALT_API_PASSWD = 'admin'
 
 # celery + rabbitmq
 platforms.C_FORCE_ROOT = True   # Running a worker with superuser privileges
 djcelery.setup_loader()
-BROKER_HOST = "172.16.23.154"
+BROKER_HOST = "127.0.0.1"
 BROKER_PORT = 5672
 BROKER_USER = "guest"
 BROKER_PASSWORD = "guest"
