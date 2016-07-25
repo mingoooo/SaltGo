@@ -31,6 +31,7 @@ def command(request):
     """command view"""
     try:
         jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
+        minions = models.Minion_Status.objects.only("minion_id")
     except Exception as e:
         logger.error(e)
     return render(request, 'execute/command.html', locals())
@@ -41,8 +42,14 @@ def exec_cmd(request):
     """run command"""
     if request.method == 'POST':
         expr_from = request.POST.get('expr_from')
-        tgt = request.POST.get('target')
         cmd = request.POST.get('command')
+        if expr_from == 'list':
+            tgt_list = request.POST.getlist('target')
+            tgt = ','.join(tgt_list)
+        else:
+            tgt = request.POST.get('target')
+        print request.POST
+        print tgt
         if expr_from and tgt and cmd:
             try:
                 logger.info(u'执行命令,(expr_from: %s, target: %s, command: %s)' % (expr_from, tgt, cmd))
@@ -72,11 +79,13 @@ def exec_cmd(request):
                 return redirect('command')
             else:
                 jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
+                minions = models.Minion_Status.objects.only("minion_id")
                 error_msg = '没有匹配的主机！'
                 logger.warning(u'没有匹配的主机！')
                 return render(request, 'execute/command.html', locals())
         else:
             jobs = models.Jobs_History.objects.filter(is_sls=False).order_by('-start_time')[:10]
+            minions = models.Minion_Status.objects.only("minion_id")
             error_msg = '信息不完整！'
             logger.warning(u'信息不完整！')
             return render(request, 'execute/command.html', locals())

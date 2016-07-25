@@ -16,7 +16,7 @@
                     {% csrf_token %}
                     <div class="col-md-5">
                         <label>匹配方式</label>
-                        <select class="form-control" name="expr_from">
+                        <select class="form-control" name="expr_from" id="expr_from">
                             <option value="glob" selected="selected">Glob</option>
                             <option value="pcre">Regex</option>
                             <option value="list">List</option>
@@ -24,7 +24,7 @@
                             <option value="pillar">Pillar</option>
                         </select>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5" id="target_div">
                         <label>目标</label>
                         <input class="form-control" name="target" type="text" placeholder="target" />
                     </div>
@@ -88,4 +88,30 @@
         </div>
     </div>
 </div>
+<script>
+    var t = function(){
+        if ($("#expr_from").val() == 'list'){
+            $("#target_div").html(`
+                    <label>目标</label>
+                    <select class="form-control" name="target" id="target" multiple="multiple">
+                        {% for minion in minions %}
+                        <option value="{{ minion }}">{{ minion }}</option>
+                        {% endfor %}
+                    </select>
+            `);
+            $("#target").select2();
+        }
+        else{
+            $("#target_div").html(`
+                    <label>目标</label>
+                    <input class="form-control" name="target" type="text" placeholder="target" />
+            `);
+        }
+    };
+
+    $(document).ready(function(){
+        $("#expr_from").change(t);
+    });
+
+</script>
 {% endblock %}
