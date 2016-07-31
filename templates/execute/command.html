@@ -16,7 +16,7 @@
                     {% csrf_token %}
                     <div class="col-md-5">
                         <label>匹配方式</label>
-                        <select class="form-control" name="expr_from" id="expr_from">
+                        <select class="form-control" name="expr_form" id="expr_form">
                             <option value="glob" selected="selected">Glob</option>
                             <option value="pcre">Regex</option>
                             <option value="list">List</option>
@@ -68,7 +68,7 @@
                                 <thead>
                                 <tr>
                                     <td width="100">
-                                        <a href="{% url 'get_result' j.jid %}">
+                                        <a href="{% url 'result' j.jid %}">
                                             <button class="btn btn-info btn-circle">
                                                 <i class="fa fa-search"></i>
                                             </button>
@@ -90,7 +90,7 @@
 </div>
 <script>
     var t = function(){
-        if ($("#expr_from").val() == 'list'){
+        if ($("#expr_form").val() == 'list'){
             $("#target_div").html(`
                     <label>目标</label>
                     <select class="form-control" name="target" id="target" multiple="multiple">
@@ -110,8 +110,7 @@
     };
 
     $(document).ready(function(){
-        $("#expr_from").change(t);
+        $("#expr_form").change(t);
     });
-
 </script>
 {% endblock %}

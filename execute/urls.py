@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^exec_cmd/$', views.exec_cmd, name='exec_cmd'),
     url(r'^state/$', views.state, name='state'),
     url(r'^exec_state/$', views.exec_state, name='exec_state'),
-    url(r'^result/(?P<jid>[0-9]+)$', views.get_result, name='get_result'),
+    url(r'^result/(?P<jid>[0-9]+)$', views.result, name='result'),
+    url(r'^flush_state_file/$', views.flush_state_file, name='flush_state_file'),
 ]

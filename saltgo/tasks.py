@@ -20,6 +20,8 @@ def save_result(jid, total):
         count += 1
         time.sleep(3)
     if ret:
+        if ret.get('outputter') == 'highstate':
+            ret = ret.get('data')
         succeed = len(ret)
         failed = total - succeed
         r = models.Jobs_Result(jid_id=jid, succeed=succeed, failed=failed, result=json.dumps(ret))
