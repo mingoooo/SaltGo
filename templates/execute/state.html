@@ -29,23 +29,23 @@
                         <input class="form-control" name="target" type="text" placeholder="target" />
                     </div>
                     </div>
-                    <div class="col-md-12">
-                    <div class="col-md-5" style="padding-top:25px; padding-bottom:20px;">
+                    <div class="col-md-12" id="sls_row">
+                    <div class="col-md-5" id="sls_div" style="padding-top:25px; padding-bottom:20px;">
                         <label>
                             操作
                             <button onclick="flushState()" type="button" style="background-color:transparent; border-color:transparent; position:relative; left:350px; color:green;">
-                                <i class="fa fa-refresh"></i>
+                                <i id="ref_icon" class="fa fa-refresh"></i>
                             </button>
                         </label>
-                        <select class="form-control" name="sls" id="sls">
+                        <select class="form-control" name="sls" id="sls" onchange="getDescription()">
                             {% for s in state_files %}
-                            <option>{{ s.state_name }}</option>
+                            <option value="{{ s.state_code }}" title="{{ s.descriptions }}">{{ s.state_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-5" style="padding-top:25px;">
+                    <div class="col-md-5" id="sls_div" style="padding-top:30px;">
                         <label>描述</label>
-                        <textarea class="form-control" disabled=disabled rows="4"></textarea>
+                        <textarea class="form-control" id="description" disabled=disabled rows="4"></textarea>
                     </div>
                     </div>
                     <div class="col-lg-12" style="padding-top:25px; padding-bottom:30px;">
@@ -109,14 +109,22 @@
     <!-- /.container-fluid -->
 </div>
 <script>
-    $("#sls").select2();
-</script>
-<script>
-    function flushState(){
-        $.ajax("{% url 'flush_state_file' %}",{
-            method: 'POST'
+    var rotation = function() {
+        $("#ref_icon").rotate({
+            angle: 0,
+            animateTo: 360
         });
-        $("#sls").select2();
+    }
+    function flushState(){
+        rotation()
+        $.ajax("{% url 'flush_state_file' %}",{
+            method: 'POST',
+            success: function(){
+                $("#sls_row").load("/execute/state/ #sls_div", function(){
+                    $("#sls").select2();
+                });
+            }
+        });
     }
 </script>
 <script>
@@ -140,8 +148,15 @@
         }
     };
 
+    function getDescription(){
+        var d = $("#sls").find("option:selected").attr("title")
+        $("#description").text(d);
+    };
+
     $(document).ready(function(){
+        $("#sls").select2();
         $("#expr_form").change(t);
+        getDescription()
     });
 </script>
 {% endblock %}

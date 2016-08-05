@@ -20,7 +20,7 @@ def state(request):
     """state view"""
     try:
         jobs = models.Jobs_History.objects.filter(is_sls=True).order_by('-start_time')[:10]
-        state_files = models.State_File.objects.only("state_name")
+        state_files = models.State_File.objects.all()
         minions = models.Minion_Status.objects.only("minion_id")
     except Exception as e:
         logger.error(e)
@@ -51,7 +51,7 @@ def exec_state(request):
                         logger.warning(u'用户缺少权限执行highstate: %s' % u)
                         error_msg = '权限不足！'
                         jobs = models.Jobs_History.objects.filter(is_sls=True).order_by('-start_time')[:10]
-                        state_files = models.State_File.objects.only("state_name")
+                        state_files = models.State_File.objects.all()
                         minions = models.Minion_Status.objects.only("minion_id")
                         return render(request, 'execute/state.html', locals())
                 else:
@@ -65,7 +65,7 @@ def exec_state(request):
                         logger.warning(u'用户缺少权限执行%s: %s' % (sls, u))
                         error_msg = '权限不足！'
                         jobs = models.Jobs_History.objects.filter(is_sls=True).order_by('-start_time')[:10]
-                        state_files = models.State_File.objects.only("state_name")
+                        state_files = models.State_File.objects.all()
                         minions = models.Minion_Status.objects.only("minion_id")
                         return render(request, 'execute/state.html', locals())
                 if ret:
@@ -88,7 +88,7 @@ def exec_state(request):
                     error_msg = '没有匹配的主机！'
                     logger.warning(u'没有匹配的主机！')
                     jobs = models.Jobs_History.objects.filter(is_sls=True).order_by('-start_time')[:10]
-                    state_files = models.State_File.objects.only("state_name")
+                    state_files = models.State_File.objects.all()
                     minions = models.Minion_Status.objects.only("minion_id")
                     return render(request, 'execute/state.html', locals())
             else:
@@ -101,7 +101,7 @@ def exec_state(request):
         logger.warning(u'用户缺少权限执行state file: %s' % u)
         error_msg = '权限不足！'
         jobs = models.Jobs_History.objects.filter(is_sls=True).order_by('-start_time')[:10]
-        state_files = models.State_File.objects.only("state_name")
+        state_files = models.State_File.objects.all()
         minions = models.Minion_Status.objects.only("minion_id")
         return render(request, 'execute/state.html', locals())
     return redirect('state')
@@ -227,7 +227,7 @@ def flush_state_file(request):
             logger.warning(u'用户缺少权限刷新state file: %s' % u)
             error_msg = '权限不足！'
             jobs = models.Jobs_History.objects.filter(is_sls=True).order_by('-start_time')[:10]
-            state_files = models.State_File.objects.only("state_name")
+            state_files = models.State_File.objects.all()
             minions = models.Minion_Status.objects.only("minion_id")
             return render(request, 'execute/state.html', locals())
     return redirect('state')
